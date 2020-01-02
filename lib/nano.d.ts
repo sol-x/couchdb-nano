@@ -940,6 +940,7 @@ declare namespace nano {
     value: {
       rev: string;
     };
+    error?: string;
   }
 
   interface DocumentResponseRow<D> extends DocumentResponseRowMeta {
