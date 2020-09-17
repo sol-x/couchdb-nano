@@ -14,6 +14,11 @@ import { CoreOptions, Request } from "request";
 declare function nano(config: nano.Configuration | string): nano.ServerScope;
 
 declare namespace nano {
+  interface FollowableEventEmitter extends EventEmitter {
+    follow(): void;
+    stop(): void;
+  }
+
   interface Configuration {
     url: string;
     cookie?: string;
@@ -30,7 +35,7 @@ declare namespace nano {
     db: DatabaseScope;
     use<D>(db: string): DocumentScope<D>;
     scope<D>(db: string): DocumentScope<D>;
-    request: Promise<any>;
+    request: RequestFunction;
     relax: Promise<any>;
     dinosaur: Promise<any>;
     // http://docs.couchdb.org/en/latest/api/server/authn.html#cookie-authentication
@@ -155,6 +160,11 @@ declare namespace nano {
       options: any,
       callback?: Callback<DatabaseReplicateResponse>
     ): Promise<DatabaseReplicateResponse>;
+    follow(callback?: Callback<any>): FollowableEventEmitter;
+    follow(
+      params: DocumentScopeFollowUpdatesParams,
+      callback?: Callback<any>
+    ): FollowableEventEmitter;
     // http://docs.couchdb.org/en/latest/api/database/compact.html#post--db-_compact
     compact(callback?: Callback<OkResponse>): Promise<OkResponse>;
     // http://docs.couchdb.org/en/latest/api/database/changes.html#get--db-_changes
